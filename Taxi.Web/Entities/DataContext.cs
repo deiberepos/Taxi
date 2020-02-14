@@ -1,8 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Taxi.Web.Entities
 {
@@ -15,6 +11,16 @@ namespace Taxi.Web.Entities
         public DbSet<TaxiEntity> Taxis { get; set; }
         public DbSet<TripEntity> Trips { get; set; }
         public DbSet<TripDetailEntity> TripDetails { get; set; }
+
+        //Override del método OnmodelCreating para controlar un campo único
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<TaxiEntity>()
+        .HasIndex(t => t.Plaque)
+        .IsUnique();
+
+        }
 
     }
 }

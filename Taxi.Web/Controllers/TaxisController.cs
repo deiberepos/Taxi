@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -57,8 +58,24 @@ namespace Taxi.Web.Controllers
             {
                 taxiEntity.Plaque = taxiEntity.Plaque.ToUpper();
                 _context.Add(taxiEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("Duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Está intentado registrar un taxi con una placa ya registrada");
+                    }
+                    else 
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+                    
+                }
             }
             return View(taxiEntity);
         }
@@ -95,8 +112,23 @@ namespace Taxi.Web.Controllers
             {
                 taxiEntity.Plaque = taxiEntity.Plaque.ToUpper();
                 _context.Update(taxiEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Está intentado registrar un taxi con una placa ya registrada");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+
+                }
             }
             return View(taxiEntity);
         }
