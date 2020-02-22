@@ -47,6 +47,7 @@ namespace Taxi.Web.Entities
 
         public TaxiEntity Taxi { get; set; }
         public ICollection<TripDetailEntity> TripDetails { get; set; }
+        public UserEntity User { get; set; }
     }
 
 }

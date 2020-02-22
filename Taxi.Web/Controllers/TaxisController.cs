@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Taxi.Web.Entities;
 
 namespace Taxi.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TaxisController : Controller
     {
         private readonly DataContext _context;
@@ -148,15 +150,6 @@ namespace Taxi.Web.Controllers
                 return NotFound();
             }
 
-            return View(taxiEntity);
-        }
-
-        // POST: Taxis/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var taxiEntity = await _context.Taxis.FindAsync(id);
             _context.Taxis.Remove(taxiEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

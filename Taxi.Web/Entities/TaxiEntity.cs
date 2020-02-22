@@ -13,6 +13,7 @@ namespace Taxi.Web.Entities
         [RegularExpression(@"^([A-Za-z]{3}\d{3})$", ErrorMessage = "The field {0} must have three characters and three numbers.")]
         public string Plaque { get; set; }
         public ICollection<TripEntity> Trips { get; set; }
+        public UserEntity User { get; set; }
 
     }
 }
