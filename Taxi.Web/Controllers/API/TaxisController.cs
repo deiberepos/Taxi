@@ -41,11 +41,14 @@ namespace Taxi.Web.Controllers.API
 
 
             if (taxiEntity == null)
-            {
+            {/*Esto se supone que hace lo mismo
                 _context.Taxis.Add(new TaxiEntity { Plaque = plaque });
                 await _context.SaveChangesAsync();
                 taxiEntity = await _context.Taxis.FirstOrDefaultAsync(t => t.Plaque == plaque);
-
+                */
+                taxiEntity = new TaxiEntity { Plaque = plaque.ToUpper() };
+                _context.Taxis.Add(taxiEntity);
+                await _context.SaveChangesAsync();
             }
             //Aqui usamos el método convertidor
             return Ok(_converterHelper.ToTaxiResponse(taxiEntity));
