@@ -63,7 +63,7 @@ namespace Taxi.Prism.ViewModels
                     "Accept");
                 return;
             }
-
+            /*
             IsRunning = true;
             //Si la placa ingresada cumple
             //Va al diccionario de recursos y devuelve la direccion de publicación
@@ -72,7 +72,25 @@ namespace Taxi.Prism.ViewModels
             //Le enviamos los datos necesarios la url y el controlador
             Response response = await _apiService.GetTaxiAsync(Plaque, url, "api", "/Taxis");
             //Debemos manejar la respuesta si pudo o no realizar la petición
+            IsRunning = false;*/
+
+            IsRunning = true;
+            var url = App.Current.Resources["UrlAPI"].ToString();
+            //Se agrega el llamado al nétodo para verificar la conexión
+            var connection = await _apiService.CheckConnectionAsync(url);
+            if (!connection)
+            {
+                IsRunning = false;
+                await App.Current.MainPage.DisplayAlert("Error", "Check the internet connection.", "Accept");
+                return;
+            }
+
+            Response response = await _apiService.GetTaxiAsync(Plaque, url, "api", "/Taxis");
             IsRunning = false;
+
+
+
+
             if (!response.IsSuccess)
             {
                 await App.Current.MainPage.DisplayAlert(
